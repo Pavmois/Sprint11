@@ -1,8 +1,8 @@
 {
-  "name": "sprint11",
+  "name": "Sprint11",
   "version": "1.0.0",
-  "description": "Проектная работа на закрепление тем \"Модули в JS\" и \"Web-pack\"",
-  "main": "script.js",
+  "description": "Проектная работа на закрепление темы \"Web-pack\"",
+  "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production rimraf dist && webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --open --watch",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pavmois/webpack.github.io.git"
+    "url": ""
   },
   "author": "Pavel Moiseev",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Pavmois/webpack.github.io/issues"
+    "url": "https://github.com/Pavmois/Sprint11/issues"
   },
-  "homepage": "https://github.com/Pavmois/webpack.github.io",
+  "homepage": "https://github.com/Pavmois/Sprint11",
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
@@ -28,7 +28,7 @@
     "css-loader": "^3.3.2",
     "cssnano": "^4.1.10",
     "file-loader": "^5.0.2",
-    "gh-pages": "^2.1.1",
+    "gh-pages": "~2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^6.0.0",
     "mini-css-extract-plugin": "^0.8.0",
