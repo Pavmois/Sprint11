@@ -265,7 +265,7 @@ class Api {
 
     //1. Загрузка информации о пользователе с сервера
     getUserInfo() {
-        fetch('http://95.216.175.5/cohort5/users/me', {
+        fetch('http://praktikum.tk/cohort5/users/me', {
             headers: {authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055'}
         })
         .then(res => {if (res.ok) {return res.json();}
@@ -285,7 +285,7 @@ class Api {
 
     //2. Загрузка первоначальных карточек с сервера
     getInitialCards() {
-        fetch('http://95.216.175.5/cohort5/cards', {
+        fetch('http://praktikum.tk/cohort5/cards', {
             headers: { authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055'}
         })
         .then(res => {
@@ -302,7 +302,7 @@ class Api {
 
     //3. Редактирование профиля
     saveChange(name, about){
-        return fetch('http://95.216.175.5/cohort5/users/me', {
+        return fetch('http://praktikum.tk/cohort5/users/me', {
         method: 'PATCH',
         headers: {authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055','Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -323,7 +323,7 @@ class Api {
 }
 
 const api = new Api({
-    baseUrl: 'http://95.216.175.5/cohort5',
+    baseUrl: 'http://praktikum.tk/cohort5',
     headers: {
       authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055',
       'Content-Type': 'application/json'
