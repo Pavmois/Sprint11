@@ -6,10 +6,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
-  entry: { main: './src/index.js' },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[chunkhash].js'
+      entry: { main: './src/index.js' 
+    },
+      output: {
+         path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[chunkhash].js'
   },
   module: {
     rules: [
@@ -17,7 +18,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {loader: "babel-loader"},
-        exclude: /node_modules/
       },
       {
         test: /\.css$/i,
@@ -44,7 +44,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ // 
+    new MiniCssExtractPlugin({ 
       filename: 'style.[contenthash].css',
     }),
     new HtmlWebpackPlugin({
