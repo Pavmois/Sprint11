@@ -1,83 +1,14 @@
 import "./style.css";
+import { Popup } from './scripts/popup';
+import { Card } from './scripts/card'; // Cозданиe карточки
+import { CardList } from './scripts/cardlist'; // 10 карточек при загрузке страницы
+import { Api } from './scripts/api';
 const cardContainer = document.querySelector(".places-list");
-// Cозданиe карточки
-class Card {
-    constructor(name, link) {
-        this.card = this.createCard(name, link);
-        this.like = this.like.bind(this);
-        this.remove = this.remove.bind(this);
-        this.card.querySelector('.place-card__like-icon').addEventListener('click', this.like);
-        this.card.querySelector('.place-card__delete-icon').addEventListener('click', this.remove);
-    }
-
-    createCard(name, link) {
-        const placeCard = document.createElement('div');
-        placeCard.classList.add('place-card');
-
-        const cardImage = document.createElement('div');
-        cardImage.classList.add('place-card__image');
-        placeCard.appendChild(cardImage);
-        cardImage.setAttribute('style', `background-image: url(${link})`);
-    
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add('place-card__delete-icon');
-        cardImage.appendChild(deleteButton);
-    
-        const cardDescription = document.createElement('div');
-        cardDescription.classList.add('place-card__description');
-        placeCard.appendChild(cardDescription);
-
-        const cardName = document.createElement('h3');
-        cardName.classList.add('place-card__name');
-        cardName.textContent = name;
-        cardDescription.appendChild(cardName);
-        
-        const likeButton = document.createElement('button');
-        likeButton.classList.add('place-card__like-icon');
-        cardDescription.appendChild(likeButton);
-
-        return placeCard;
-    }
-
-    like(event) {
-        event.target.classList.toggle('place-card__like-icon_liked');
-    }
-
-    remove(){
-        this.card.parentNode.removeChild(this.card);
-    }
-};
-
-// 10 карточек при загрузке страницы
-class CardList {
-    constructor(container, arr) {
-        this.container = container;
-        this.arr = arr;
-        this.render();
-    }
-
-    render() {
-        this.arr.forEach((arr) => {
-            this.addCard(arr.name, arr.link);
-        });
-    }
-    
-    addCard(name, link) {
-        const {card} = new Card(name, link);
-        this.container.appendChild(card);
-    } 
-}
-
-
 
 //Формы открытия и закрытия карточек
-import { Popup } from './scripts/popup';
-
 const popup = new Popup(document.querySelector('.popup'), 'popup_is-opened', '.popup__close');
 const profilePopup = new Popup(document.querySelector('.popup-profile'), 'popup-profile_is-opened', '.popup-profile__close');
-
 const infoButton = document.querySelector('.user-info__button');
-
 function openPopupForm(event) {
     event.preventDefault();
     popup.open();
@@ -85,7 +16,6 @@ function openPopupForm(event) {
 infoButton.addEventListener('click', openPopupForm);
 
 const editButton = document.querySelector('.user-info__edit');
-
 const popupProfile = document.querySelector('.popup-profile');
 const popupProfileClose = document.querySelector('.popup-profile__close');
 function openPopupProfileForm(event) {
@@ -100,7 +30,6 @@ const popupImage = document.querySelector('.popup-image');
 const popupImageClose = document.querySelector('.popup-image__close');
 let imgImage = document.querySelector('.popup-image__image');
 let url = cardContainer.getAttribute('style');
-
 function closeImage(event) {
     event.preventDefault();
     popupImage.classList.remove('popup-image_is-opened');
@@ -113,7 +42,6 @@ function showCard(event) {
         document.querySelector('.popup-image__image').src = event.target.style.backgroundImage.slice(5, -2);
     }
 }
-
 cardContainer.addEventListener('click', showCard);
 popupImageClose.addEventListener('click', closeImage);
 
@@ -147,7 +75,6 @@ form.addEventListener('input', function (event) {
     } else {
         addButton.removeAttribute('disabled');
         addButton.classList.remove('popup-profile__button_disable');
-
         errorName.textContent = '';
         errorName.parentNode.classList.remove('error');
     }
@@ -181,22 +108,17 @@ form.addEventListener('input', function (event) {
 const formName = document.querySelector('.popup__input_type_name');
 const formLink = document.querySelector('.popup__input_type_link-url');
 const popupButton = document.querySelector('.popup__button');
-
 function submitCardHandler() {
-    event.preventDefault();
     cardList.addCard(formName.value, formLink.value);
     popup.reset();
     popup.close();
 }
 newCardForm.addEventListener('submit', submitCardHandler);
 
-  //Применение изменений в редактировании профиля
-  const addButton = document.querySelector('.popup-profile__button');
-
-  function submitData() {
-      
+//Применение изменений в редактировании профиля
+const addButton = document.querySelector('.popup-profile__button');
+function submitData() {      
       event.preventDefault();
-
       api.saveChange(document.querySelector('.popup-profile__input_type_name').value, 
       document.querySelector('.popup-profile__input_type_about').value)
       .then(() => {
@@ -207,9 +129,9 @@ newCardForm.addEventListener('submit', submitCardHandler);
       })
       .catch((err) => console.log(err));
   }
-  form.addEventListener('submit', submitData);
+form.addEventListener('submit', submitData);
 
-  function getProfile() {
+function getProfile() {
     api.saveChange(document.querySelector('.popup-profile__input_type_name').value, 
     document.querySelector('.popup-profile__input_type_about').value);
   }
@@ -217,61 +139,6 @@ newCardForm.addEventListener('submit', submitCardHandler);
 
 //Серверная часть
 const serverUrl = NODE_ENV === 'development' ? 'http://praktikum.tk/cohort5' : 'https://praktikum.tk/cohort5';
-class Api {
-    constructor(option) {    
-    }
-
-    //1. Загрузка информации о пользователе с сервера
-    getUserInfo() {
-        fetch((serverUrl+'/users/me'), {
-            headers: {authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055'}
-        })
-        .then(res => {if (res.ok) {return res.json();}
-            return Promise.reject(`Ошибка загрузки информации о пользователе с сервера: ${res.status}`);
-        })
-        .then((result) => {
-            document.querySelector('.user-info__name').textContent = result.name;
-            document.querySelector('.user-info__job').textContent = result.about;
-            // текущие данные профиля показываются в форме редактирования
-            document.Profile.name.value = result.name;
-            document.Profile.about.value = result.about;
-        });
-    }
-
-    //2. Загрузка первоначальных карточек с сервера
-    getInitialCards() {
-        fetch((serverUrl+'/cards'), {
-            headers: { authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055'}
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка загрузки карточек изображений с сервера: ${res.status}`);
-          })
-            .then((result) => {new CardList(cardContainer, result);
-            });
-  }
-
-    //3. Редактирование профиля
-    saveChange(name, about){
-        return fetch((serverUrl+'/users/me'), {
-        method: 'PATCH',
-        headers: {authorization: '16cff247-2cce-4ee4-a2da-c1f063b15055','Content-Type': 'application/json'},
-        body: JSON.stringify({
-            name: name,
-            about: about
-        })
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json(); 
-            }
-            return Promise.reject(`Ошибка загрузки данных профиля с сервера: ${res.status}`);
-        })
-    };   
-}
-
 const api = new Api({
     baseUrl: serverUrl,
     headers: {
@@ -279,6 +146,5 @@ const api = new Api({
       'Content-Type': 'application/json'
     }
   });
-  
-  api.getUserInfo();
-  api.getInitialCards();
+api.getUserInfo();
+api.getInitialCards();
